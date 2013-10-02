@@ -2,6 +2,13 @@ from swampy.TurtleWorld import *
 
 length = 5
 def dragon_curve(t, n):
+    """Creates a dragon curve using two mutually recursive functions.
+
+    t: Turtle object
+
+    n: integer, order or "level" of curve
+
+    """
     def x_func(t, n):
         if n == 0:
             return
