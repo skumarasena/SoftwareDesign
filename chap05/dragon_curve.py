@@ -1,5 +1,11 @@
 from swampy.TurtleWorld import *
 
+""" Author: Samantha Kumarasena
+
+    Received help from Anne Wilkinson (thank you, Anne!) who
+    in turn received help from Julian Ceipik (Anne thanks Julian, too).
+
+"""
 length = 5
 def dragon_curve(t, n):
     """Creates a dragon curve using two mutually recursive functions.
