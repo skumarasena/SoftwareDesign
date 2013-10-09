@@ -6,7 +6,7 @@ def consecutive_doubles():
     fin = open('words.txt')
     for line in fin:
         word = line.strip()
-        for i in range(len(word)-6):
+        for i in range(len(word)-5):
             if word[i] == word[i+1]:
                 if word[i+2] == word[i+3]:
                     if word[i+4] == word[i+5]:
