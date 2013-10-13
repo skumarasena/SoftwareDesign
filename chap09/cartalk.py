@@ -12,7 +12,7 @@ def consecutive_doubles():
                     if word[i+4] == word[i+5]:
                         print word
 
-consecutive_doubles()
+#consecutive_doubles()
 
 
 def is_palindrome(s):
@@ -25,15 +25,15 @@ def is_palindrome(s):
 def odometer_palindrome():
     """Looks for a six-digit integer that solves the Cartalk puzzle from
     Exercise 9.8 in Think Python. Prints the solutions"""
-    for i in range(int(1e6), int(1e7)):
-        s = str(i)
+    for i in range(int(1e6)):
+        s = str(i).zfill(6)
         if(is_palindrome(s[2:])):
-            s = str(i+1)
+            s = str(i+1).zfill(6)
             if(is_palindrome(s[1:])):
-                s = str(i+2)
+                s = str(i+2).zfill(6)
                 if(is_palindrome(s[1:-1])):
-                    s = str(i+3)
+                    s = str(i+3).zfill(6)
                     if(is_palindrome(s)):
-                        print i
+                        print str(i).zfill(6)
 
 odometer_palindrome()
