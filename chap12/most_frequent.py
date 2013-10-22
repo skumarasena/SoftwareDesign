@@ -14,7 +14,7 @@ def most_frequent(s):
     """Prints letters in decreasing order of frequency.
 
     s: string
-    Returns: None"""
+    Returns: list of strings"""
     d = histogram(s)
     
     t = []
@@ -28,6 +28,16 @@ def most_frequent(s):
         res.append(letter)
 
     return res
+
+
+ 
+def most_frequent2(s):
+    """New version of most_frequent: prints letters in decreasing
+    order of frequency.
+    
+    s: string
+    Returns: list of strings"""
+    return sorted(tuple(histogram))
         
 
 print most_frequent('samantha')
