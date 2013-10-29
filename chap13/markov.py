@@ -11,23 +11,26 @@ import string
 import random
 
 
+suffixes = {}
+
 def process_file(filename, skip_header=True):
-    """Makes a histogram that contains the words from a file.
+    """Returns a list of prefixes mapped to suffixes.
 
     filename: string
-    skip_header: boolean, whether to skip the Gutenberg header
    
-    Returns: map from each word to the number of times it appears.
+    Returns: list of words in file
     """
-    hist = {}
+    res =  []
     fp = file(filename)
-
+    
     if skip_header:
         skip_gutenberg_header(fp)
 
     for line in fp:
-        process_line(line, hist)
-    return hist
+        words = line.rstrip().split()
+        for word in words:
+            res.append(word)
+    return res
 
 
 def skip_gutenberg_header(fp):
@@ -40,115 +43,53 @@ def skip_gutenberg_header(fp):
             break
 
 
-def process_line(line, hist):
-    """Adds the words in the line to the histogram.
+def process_words(w_list):
+    """Maps prefixes to suffixes from the given word list.
 
-    Modifies hist.
-
-    line: string
-    hist: histogram (map from word to frequency)
+    w_list: list of strings
     """
-    # replace hyphens with spaces before splitting
-    line = line.replace('-', ' ')
     
-    for word in line.split():
-        # remove punctuation and convert to lowercase
-        word = word.strip(string.punctuation + string.whitespace)
-        word = word.lower()
-
-        # update the histogram
-        hist[word] = hist.get(word, 0) + 1
-
-
-def most_common(hist):
-    """Makes a list of the key-value pairs from a histogram and
-    sorts them in descending order by frequency.
-
-    hist: map from word to the number of times it appears
-
-    returns: list of (word, frequency) pairs, sorted by frequency
-    """
-    t = []
-    for word, freq in hist.items():
-        t.append((freq, word))
-    
-    t.sort(reverse=True)
-
-    res = []
-    for freq, word in t:
-        res.append((word, freq))
-
-    return res
+    for i in range(len(w_list)-2):
+        prefix = (w_list[i], w_list[i+1])
+        suffix = w_list[i+2]
+        if prefix not in suffixes:
+            suffixes[prefix] = [suffix]
+        else:
+            suffixes[prefix].append(suffix)
+    return suffixes
 
 
-def print_most_common(hist, num=10):
-    """Prints the most commons words in a histogram and their frequencies.
-    
-    hist: histogram (map from word to frequency
-    num: number of words to print
-    """
-    t = most_common(hist)
-    print 'The most common words are:'
-    for freq, word in t[:num]:
-        print word, '\t', freq
-
-
-def subtract(d1, d2):
-    """Returns a dictionary with all keys that appear in d1 but not d2.
-
-    d1, d2: dictionaries
-
-    returns: new dictionary
-    """
-    s1 = set(d1.keys())
-    s2 = set(d2.keys())
-    s = s1 - s2
-    res = {}
-    for word in s:
-        res[word] = d1[word]
-    return res
-
-
-def total_words(hist):
-    """Returns the total of the frequencies in a histogram."""
-    return sum(hist.values())
-
-
-def different_words(hist):
-    """Returns the number of different words in a histogram."""
-    return len(hist)
-
-
-def random_word(hist):
+def random_text():
     """Chooses a random word from a histogram.
 
     The probability of each word is proportional to its frequency.
     """
     t = []
-    for word, freq in hist.items():
-        t.extend([word] * freq)
+    first = random.choice(suffixes.keys())
+    t.extend(list(first))
+    for i in range(200):
+        prefix = t[len(t)-2], t[len(t)-1]
+        if prefix in suffixes:
+            t.append(random.choice(suffixes[prefix]))
+        else:
+            t.extend(list(random.choice(suffixes.keys())))
     
-    return random.choice(t)
+    return t
+
+def print_text(w_list):
+  """Prints text from list.
+
+    w_list: list of words"""
+  for word in w_list:
+      print word,   
+    
 
 
 if __name__ == '__main__':
-    hist = process_file('emma.txt', skip_header=True)
-    print 'Total number of words:', total_words(hist)
-    print 'Number of different words:', different_words(hist)
-
-    t = most_common(hist)
-    print 'The most common words are:'
-    for freq, word in t[0:20]:
-        print word, '\t', freq
-
-    words = process_file('words.txt', skip_header=False)
-
-    diff = subtract(hist, words)
-    print "The words in the book that aren't in the word list are:"
-    for word in diff.keys():
-        print word,
-
-    print "\n\nHere are some random words from the book"
-    for i in range(100):
-        print random_word(hist),
-
+    w_list1 = process_file('emma.txt', skip_header = True)
+    w_list2 = process_file('tom_sawyer.txt', skip_header = False)
+    w_list = w_list1 + w_list2
+    
+ 
+    process_words(w_list)
+    print_text(random_text())

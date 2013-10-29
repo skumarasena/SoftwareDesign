@@ -1,6 +1,10 @@
 import string
 
 def convert_words(filename):
+    """Strips words in file of whitespace and punctuation.
+
+    filename: string
+    Returns: list of strings"""
     fin = open(filename)
     s = string.whitespace + string.punctuation
     
